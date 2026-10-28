@@ -1,18 +1,11 @@
 'use client';
-import { useEffect, useRef, useState, useTransition } from 'react';
+import { useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { simpanSemuaPengaturan, type Hasil } from '@/app/pengaturan/actions';
 import { formatNomor, TOKEN_NOMOR } from '@/lib/nomor';
 import { MAKS_MB_BATAS, type Pengaturan } from '@/lib/pengaturanDef';
 import { card, inp, lbl, btnP, btnO } from '@/lib/ui';
 import PesanModal from './PesanModal';
-
-const BAGIAN = [
-  { id: 'penomoran', teks: 'Penomoran', ikon: 'fa-hashtag' },
-  { id: 'unggah', teks: 'Unggah & File', ikon: 'fa-file' },
-  { id: 'pengingat', teks: 'Pengingat', ikon: 'fa-bell' },
-  { id: 'cadangan', teks: 'Cadangan & Ekspor', ikon: 'fa-database' },
-];
 
 function Kepala({ ikon, judul, sub }: { ikon: string; judul: string; sub: string }) {
   return (
@@ -38,30 +31,15 @@ function Sakelar({ nama, nilai, onUbah, label, ket }: { nama: string; nilai: boo
 
 export default function PengaturanForm({ awal, tahun, terakhir, agendaTerakhir }: { awal: Pengaturan; tahun: number; terakhir: number; agendaTerakhir: number }) {
   const r = useRouter(), form = useRef<HTMLFormElement>(null);
-  const nomorAwal = terakhir + 1, [aktifBagian, setAktifBagian] = useState(BAGIAN[0].id);
-  // Sorot menu kiri sesuai bagian yang sedang tampil saat halaman digulir.
-  useEffect(() => {
-    const el = BAGIAN.map((b) => document.getElementById(b.id)).filter(Boolean) as HTMLElement[];
-    const io = new IntersectionObserver((es) => { const t = es.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0]; if (t) setAktifBagian(t.target.id); }, { rootMargin: '-10% 0px -60% 0px' });
-    el.forEach((e) => io.observe(e));
-    return () => io.disconnect();
-  }, []);
+  const nomorAwal = terakhir + 1;
   const [p, setP] = useState(awal), [nomorMulai, setNomorMulai] = useState<string>(String(nomorAwal)), [pesan, setPesan] = useState<Hasil | null>(null), [pending, mulai] = useTransition();
   const ubah = <K extends keyof Pengaturan>(k: K, v: Pengaturan[K]) => setP((x) => ({ ...x, [k]: v }));
   const nomorBerikut = formatNomor(p.format_nomor, { no: Math.max(1, Number(nomorMulai) || nomorAwal), tahun });
   const agendaBerikut = Math.max(agendaTerakhir + 1, Number(p.agenda_mulai) || 1);
 
   return (
-    <form ref={form} className="grid grid-cols-1 lg:grid-cols-[220px_minmax(0,1fr)] gap-4 items-start"
+    <form ref={form}
       action={(fd) => mulai(async () => { const h = await simpanSemuaPengaturan(fd); setPesan(h); if (h.ok) r.refresh(); })}>
-      <nav className={card + ' lg:sticky lg:top-4 flex lg:flex-col gap-1 overflow-x-auto !p-2'} aria-label="Bagian pengaturan">
-        {BAGIAN.map((b) => (
-          <a key={b.id} href={'#' + b.id} onClick={() => setAktifBagian(b.id)} aria-current={aktifBagian === b.id ? 'true' : undefined} className={'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold no-underline whitespace-nowrap ' + (aktifBagian === b.id ? 'bg-brand-soft text-brandfg' : 'text-ink-2')}>
-            <i className={'fa-solid w-4 text-center ' + b.ikon} aria-hidden="true"></i>{b.teks}
-          </a>
-        ))}
-      </nav>
-
       <div className="flex flex-col gap-4 min-w-0">
         <section id="penomoran" className={card + ' scroll-mt-4'}>
           <Kepala ikon="fa-hashtag" judul="Penomoran" sub="Format nomor naskah dan urutannya." />
@@ -71,7 +49,7 @@ export default function PengaturanForm({ awal, tahun, terakhir, agendaTerakhir }
           <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted">Token:
             {TOKEN_NOMOR.map((t) => <button key={t} type="button" onClick={() => ubah('format_nomor', p.format_nomor + t)} title={`Tambahkan ${t}`} className="font-mono px-2 py-1 rounded-md bg-well border border-line cursor-pointer text-ink-2">{t}</button>)}
           </div>
-          <p className="m-0 mt-2 text-xs text-muted">Teks tetap boleh ditulis langsung, mis. <span className="font-mono">[NO]/TP-BDG/[TAHUN]</span>.</p>
+          <p className="m-0 mt-2 text-xs text-muted">Teks tetap boleh ditulis langsung, mis. <span className="font-mono">[NO]/UM-000/GSD-065-04/[TAHUN]</span>.</p>
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <label className={lbl}>Reset urutan
               <select name="reset_urutan" value={p.reset_urutan} onChange={(e) => ubah('reset_urutan', e.target.value as Pengaturan['reset_urutan'])} className={inp}>
