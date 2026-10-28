@@ -1,0 +1,371 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =====================================================================
+   TEMA
+   Semua warna UI memakai variabel di bawah (format "R G B" agar Tailwind bisa
+   memberi opasitas, mis. bg-brand/50). Tema aktif dipilih lewat atribut
+   data-tema pada <html> (diatur oleh components/TemaMenu.tsx, disimpan di
+   localStorage). Untuk menambah tema: salin satu blok, ganti nama + nilai,
+   lalu daftarkan di lib/tema.ts.
+   ===================================================================== */
+/* Light Telkom (light) */
+:root, [data-tema="telkom-light"] {
+  color-scheme: light;
+  --canvas: 243 245 244; /* #F3F5F4 */
+  --surface: 255 255 255; /* #FFFFFF */
+  --well: 247 250 249; /* #F7FAF9 */
+  --locked: 233 237 235; /* #E9EDEB */
+  --inactive: 230 234 232; /* #E6EAE8 */
+  --line: 221 228 225; /* #DDE4E1 */
+  --line-strong: 186 199 194; /* #BAC7C2 */
+  --line-soft: 238 242 240; /* #EEF2F0 */
+  --line-dash: 157 176 170; /* #9DB0AA */
+  --line-mid: 203 213 209; /* #CBD5D1 */
+  --ink: 27 38 35; /* #1B2623 */
+  --ink-2: 58 63 70; /* #3A3F46 */
+  --muted: 90 96 104; /* #5A6068 */
+  --faint: 138 148 155; /* #8A949B */
+  --brand: 232 34 42; /* #E8222A */
+  --brand-fg: 232 34 42; /* #E8222A */
+  --brand-soft: 253 236 236; /* #FDECEC */
+  --brand-soft2: 253 224 224; /* #FDE0E0 */
+  --brand-strong: 142 18 24; /* #8E1218 */
+  --danger: 142 18 24; /* #8E1218 */
+  --danger-soft: 253 236 236; /* #FDECEC */
+  --danger-line: 241 185 188; /* #F1B9BC */
+  --ok-fg: 14 90 56; /* #0E5A38 */
+  --ok-bg: 213 239 226; /* #D5EFE2 */
+  --ok-line: 169 220 194; /* #A9DCC2 */
+  --info-fg: 29 74 130; /* #1D4A82 */
+  --info-bg: 220 232 247; /* #DCE8F7 */
+  --warn-fg: 122 67 0; /* #7A4300 */
+  --warn-bg: 254 241 220; /* #FEF1DC */
+  --warn-bg2: 251 227 194; /* #FBE3C2 */
+  --warn-line: 241 207 154; /* #F1CF9A */
+  --warn-ink: 61 40 0; /* #3D2800 */
+  --warn-accent: 183 121 31; /* #B7791F */
+  --logo-bg: 0 0 0 / 0;
+  --logo-pad: 0px;
+}
+
+/* Dark Telkom (dark) */
+[data-tema="telkom-dark"] {
+  color-scheme: dark;
+  --canvas: 14 15 17; /* #0E0F11 */
+  --surface: 23 25 28; /* #17191C */
+  --well: 18 20 22; /* #121416 */
+  --locked: 30 33 37; /* #1E2125 */
+  --inactive: 37 40 45; /* #25282D */
+  --line: 43 47 53; /* #2B2F35 */
+  --line-strong: 60 66 74; /* #3C424A */
+  --line-soft: 33 36 40; /* #212428 */
+  --line-dash: 75 83 92; /* #4B535C */
+  --line-mid: 52 57 64; /* #343940 */
+  --ink: 237 239 241; /* #EDEFF1 */
+  --ink-2: 205 210 215; /* #CDD2D7 */
+  --muted: 154 162 171; /* #9AA2AB */
+  --faint: 124 133 143; /* #7C858F */
+  --brand: 232 34 42; /* #E8222A */
+  --brand-fg: 255 107 113; /* #FF6B71 */
+  --brand-soft: 42 20 22; /* #2A1416 */
+  --brand-soft2: 58 26 29; /* #3A1A1D */
+  --brand-strong: 255 163 167; /* #FFA3A7 */
+  --danger: 255 154 159; /* #FF9A9F */
+  --danger-soft: 42 20 22; /* #2A1416 */
+  --danger-line: 92 35 40; /* #5C2328 */
+  --ok-fg: 110 231 183; /* #6EE7B7 */
+  --ok-bg: 14 47 35; /* #0E2F23 */
+  --ok-line: 27 94 69; /* #1B5E45 */
+  --info-fg: 147 197 253; /* #93C5FD */
+  --info-bg: 17 36 63; /* #11243F */
+  --warn-fg: 252 211 77; /* #FCD34D */
+  --warn-bg: 46 34 9; /* #2E2209 */
+  --warn-bg2: 63 46 11; /* #3F2E0B */
+  --warn-line: 107 78 18; /* #6B4E12 */
+  --warn-ink: 253 230 138; /* #FDE68A */
+  --warn-accent: 251 191 36; /* #FBBF24 */
+  --logo-bg: 255 255 255;
+  --logo-pad: 10px;
+}
+
+/* Ocean (light) */
+[data-tema="ocean"] {
+  color-scheme: light;
+  --canvas: 238 244 251; /* #EEF4FB */
+  --surface: 255 255 255; /* #FFFFFF */
+  --well: 246 249 253; /* #F6F9FD */
+  --locked: 230 238 248; /* #E6EEF8 */
+  --inactive: 225 233 244; /* #E1E9F4 */
+  --line: 218 227 240; /* #DAE3F0 */
+  --line-strong: 181 197 219; /* #B5C5DB */
+  --line-soft: 233 240 248; /* #E9F0F8 */
+  --line-dash: 143 166 196; /* #8FA6C4 */
+  --line-mid: 199 212 229; /* #C7D4E5 */
+  --ink: 15 23 42; /* #0F172A */
+  --ink-2: 51 65 85; /* #334155 */
+  --muted: 71 85 105; /* #475569 */
+  --faint: 117 133 156; /* #75859C */
+  --brand: 37 99 235; /* #2563EB */
+  --brand-fg: 29 78 216; /* #1D4ED8 */
+  --brand-soft: 239 246 255; /* #EFF6FF */
+  --brand-soft2: 219 234 254; /* #DBEAFE */
+  --brand-strong: 30 64 175; /* #1E40AF */
+  --danger: 142 18 24; /* #8E1218 */
+  --danger-soft: 253 236 236; /* #FDECEC */
+  --danger-line: 241 185 188; /* #F1B9BC */
+  --ok-fg: 14 90 56; /* #0E5A38 */
+  --ok-bg: 213 239 226; /* #D5EFE2 */
+  --ok-line: 169 220 194; /* #A9DCC2 */
+  --info-fg: 29 74 130; /* #1D4A82 */
+  --info-bg: 220 232 247; /* #DCE8F7 */
+  --warn-fg: 122 67 0; /* #7A4300 */
+  --warn-bg: 254 241 220; /* #FEF1DC */
+  --warn-bg2: 251 227 194; /* #FBE3C2 */
+  --warn-line: 241 207 154; /* #F1CF9A */
+  --warn-ink: 61 40 0; /* #3D2800 */
+  --warn-accent: 183 121 31; /* #B7791F */
+  --logo-bg: 0 0 0 / 0;
+  --logo-pad: 0px;
+}
+
+/* Emerald (light) */
+[data-tema="emerald"] {
+  color-scheme: light;
+  --canvas: 238 246 242; /* #EEF6F2 */
+  --surface: 255 255 255; /* #FFFFFF */
+  --well: 245 250 247; /* #F5FAF7 */
+  --locked: 227 240 233; /* #E3F0E9 */
+  --inactive: 221 235 227; /* #DDEBE3 */
+  --line: 212 229 219; /* #D4E5DB */
+  --line-strong: 174 203 188; /* #AECBBC */
+  --line-soft: 231 242 236; /* #E7F2EC */
+  --line-dash: 132 173 154; /* #84AD9A */
+  --line-mid: 196 219 207; /* #C4DBCF */
+  --ink: 14 38 29; /* #0E261D */
+  --ink-2: 47 74 62; /* #2F4A3E */
+  --muted: 75 102 90; /* #4B665A */
+  --faint: 114 144 132; /* #729084 */
+  --brand: 4 120 87; /* #047857 */
+  --brand-fg: 4 120 87; /* #047857 */
+  --brand-soft: 236 253 245; /* #ECFDF5 */
+  --brand-soft2: 209 250 229; /* #D1FAE5 */
+  --brand-strong: 6 95 70; /* #065F46 */
+  --danger: 142 18 24; /* #8E1218 */
+  --danger-soft: 253 236 236; /* #FDECEC */
+  --danger-line: 241 185 188; /* #F1B9BC */
+  --ok-fg: 14 90 56; /* #0E5A38 */
+  --ok-bg: 213 239 226; /* #D5EFE2 */
+  --ok-line: 169 220 194; /* #A9DCC2 */
+  --info-fg: 29 74 130; /* #1D4A82 */
+  --info-bg: 220 232 247; /* #DCE8F7 */
+  --warn-fg: 122 67 0; /* #7A4300 */
+  --warn-bg: 254 241 220; /* #FEF1DC */
+  --warn-bg2: 251 227 194; /* #FBE3C2 */
+  --warn-line: 241 207 154; /* #F1CF9A */
+  --warn-ink: 61 40 0; /* #3D2800 */
+  --warn-accent: 183 121 31; /* #B7791F */
+  --logo-bg: 0 0 0 / 0;
+  --logo-pad: 0px;
+}
+
+/* Violet (light) */
+[data-tema="violet"] {
+  color-scheme: light;
+  --canvas: 244 242 251; /* #F4F2FB */
+  --surface: 255 255 255; /* #FFFFFF */
+  --well: 250 248 255; /* #FAF8FF */
+  --locked: 234 230 247; /* #EAE6F7 */
+  --inactive: 228 223 243; /* #E4DFF3 */
+  --line: 225 219 241; /* #E1DBF1 */
+  --line-strong: 195 184 226; /* #C3B8E2 */
+  --line-soft: 238 234 249; /* #EEEAF9 */
+  --line-dash: 157 143 203; /* #9D8FCB */
+  --line-mid: 211 202 235; /* #D3CAEB */
+  --ink: 30 22 53; /* #1E1635 */
+  --ink-2: 63 53 96; /* #3F3560 */
+  --muted: 91 82 124; /* #5B527C */
+  --faint: 133 125 164; /* #857DA4 */
+  --brand: 124 58 237; /* #7C3AED */
+  --brand-fg: 109 40 217; /* #6D28D9 */
+  --brand-soft: 245 243 255; /* #F5F3FF */
+  --brand-soft2: 237 233 254; /* #EDE9FE */
+  --brand-strong: 91 33 182; /* #5B21B6 */
+  --danger: 142 18 24; /* #8E1218 */
+  --danger-soft: 253 236 236; /* #FDECEC */
+  --danger-line: 241 185 188; /* #F1B9BC */
+  --ok-fg: 14 90 56; /* #0E5A38 */
+  --ok-bg: 213 239 226; /* #D5EFE2 */
+  --ok-line: 169 220 194; /* #A9DCC2 */
+  --info-fg: 29 74 130; /* #1D4A82 */
+  --info-bg: 220 232 247; /* #DCE8F7 */
+  --warn-fg: 122 67 0; /* #7A4300 */
+  --warn-bg: 254 241 220; /* #FEF1DC */
+  --warn-bg2: 251 227 194; /* #FBE3C2 */
+  --warn-line: 241 207 154; /* #F1CF9A */
+  --warn-ink: 61 40 0; /* #3D2800 */
+  --warn-accent: 183 121 31; /* #B7791F */
+  --logo-bg: 0 0 0 / 0;
+  --logo-pad: 0px;
+}
+
+/* Sunset (light) */
+[data-tema="sunset"] {
+  color-scheme: light;
+  --canvas: 250 244 237; /* #FAF4ED */
+  --surface: 255 255 255; /* #FFFFFF */
+  --well: 255 250 245; /* #FFFAF5 */
+  --locked: 244 233 220; /* #F4E9DC */
+  --inactive: 239 226 210; /* #EFE2D2 */
+  --line: 233 222 210; /* #E9DED2 */
+  --line-strong: 210 190 168; /* #D2BEA8 */
+  --line-soft: 244 236 227; /* #F4ECE3 */
+  --line-dash: 179 152 128; /* #B39880 */
+  --line-mid: 223 209 193; /* #DFD1C1 */
+  --ink: 43 26 14; /* #2B1A0E */
+  --ink-2: 77 58 42; /* #4D3A2A */
+  --muted: 102 82 63; /* #66523F */
+  --faint: 149 128 108; /* #95806C */
+  --brand: 194 65 12; /* #C2410C */
+  --brand-fg: 194 65 12; /* #C2410C */
+  --brand-soft: 255 247 237; /* #FFF7ED */
+  --brand-soft2: 255 237 213; /* #FFEDD5 */
+  --brand-strong: 154 52 18; /* #9A3412 */
+  --danger: 142 18 24; /* #8E1218 */
+  --danger-soft: 253 236 236; /* #FDECEC */
+  --danger-line: 241 185 188; /* #F1B9BC */
+  --ok-fg: 14 90 56; /* #0E5A38 */
+  --ok-bg: 213 239 226; /* #D5EFE2 */
+  --ok-line: 169 220 194; /* #A9DCC2 */
+  --info-fg: 29 74 130; /* #1D4A82 */
+  --info-bg: 220 232 247; /* #DCE8F7 */
+  --warn-fg: 122 67 0; /* #7A4300 */
+  --warn-bg: 254 241 220; /* #FEF1DC */
+  --warn-bg2: 251 227 194; /* #FBE3C2 */
+  --warn-line: 241 207 154; /* #F1CF9A */
+  --warn-ink: 61 40 0; /* #3D2800 */
+  --warn-accent: 183 121 31; /* #B7791F */
+  --logo-bg: 0 0 0 / 0;
+  --logo-pad: 0px;
+}
+
+/* Midnight (dark) */
+[data-tema="midnight"] {
+  color-scheme: dark;
+  --canvas: 11 16 32; /* #0B1020 */
+  --surface: 18 25 51; /* #121933 */
+  --well: 14 20 39; /* #0E1427 */
+  --locked: 24 32 66; /* #182042 */
+  --inactive: 30 39 81; /* #1E2751 */
+  --line: 37 47 89; /* #252F59 */
+  --line-strong: 54 69 125; /* #36457D */
+  --line-soft: 27 36 73; /* #1B2449 */
+  --line-dash: 76 92 151; /* #4C5C97 */
+  --line-mid: 45 58 107; /* #2D3A6B */
+  --ink: 232 236 250; /* #E8ECFA */
+  --ink-2: 198 205 235; /* #C6CDEB */
+  --muted: 153 164 208; /* #99A4D0 */
+  --faint: 119 131 179; /* #7783B3 */
+  --brand: 79 70 229; /* #4F46E5 */
+  --brand-fg: 165 180 252; /* #A5B4FC */
+  --brand-soft: 27 33 84; /* #1B2154 */
+  --brand-soft2: 39 47 120; /* #272F78 */
+  --brand-strong: 199 210 254; /* #C7D2FE */
+  --danger: 252 165 165; /* #FCA5A5 */
+  --danger-soft: 58 21 25; /* #3A1519 */
+  --danger-line: 107 35 40; /* #6B2328 */
+  --ok-fg: 110 231 183; /* #6EE7B7 */
+  --ok-bg: 14 47 35; /* #0E2F23 */
+  --ok-line: 27 94 69; /* #1B5E45 */
+  --info-fg: 147 197 253; /* #93C5FD */
+  --info-bg: 17 36 63; /* #11243F */
+  --warn-fg: 252 211 77; /* #FCD34D */
+  --warn-bg: 46 34 9; /* #2E2209 */
+  --warn-bg2: 63 46 11; /* #3F2E0B */
+  --warn-line: 107 78 18; /* #6B4E12 */
+  --warn-ink: 253 230 138; /* #FDE68A */
+  --warn-accent: 251 191 36; /* #FBBF24 */
+  --logo-bg: 255 255 255;
+  --logo-pad: 10px;
+}
+
+/* Forest (dark) */
+[data-tema="forest"] {
+  color-scheme: dark;
+  --canvas: 9 19 15; /* #09130F */
+  --surface: 15 27 23; /* #0F1B17 */
+  --well: 11 22 18; /* #0B1612 */
+  --locked: 21 37 30; /* #15251E */
+  --inactive: 27 45 37; /* #1B2D25 */
+  --line: 33 58 47; /* #213A2F */
+  --line-strong: 50 85 74; /* #32554A */
+  --line-soft: 23 42 34; /* #172A22 */
+  --line-dash: 74 116 102; /* #4A7466 */
+  --line-mid: 42 72 60; /* #2A483C */
+  --ink: 230 244 238; /* #E6F4EE */
+  --ink-2: 194 220 208; /* #C2DCD0 */
+  --muted: 146 178 163; /* #92B2A3 */
+  --faint: 111 144 126; /* #6F907E */
+  --brand: 4 120 87; /* #047857 */
+  --brand-fg: 52 211 153; /* #34D399 */
+  --brand-soft: 14 46 36; /* #0E2E24 */
+  --brand-soft2: 19 64 52; /* #134034 */
+  --brand-strong: 110 231 183; /* #6EE7B7 */
+  --danger: 252 165 165; /* #FCA5A5 */
+  --danger-soft: 58 21 25; /* #3A1519 */
+  --danger-line: 107 35 40; /* #6B2328 */
+  --ok-fg: 110 231 183; /* #6EE7B7 */
+  --ok-bg: 14 47 35; /* #0E2F23 */
+  --ok-line: 27 94 69; /* #1B5E45 */
+  --info-fg: 147 197 253; /* #93C5FD */
+  --info-bg: 17 36 63; /* #11243F */
+  --warn-fg: 252 211 77; /* #FCD34D */
+  --warn-bg: 46 34 9; /* #2E2209 */
+  --warn-bg2: 63 46 11; /* #3F2E0B */
+  --warn-line: 107 78 18; /* #6B4E12 */
+  --warn-ink: 253 230 138; /* #FDE68A */
+  --warn-accent: 251 191 36; /* #FBBF24 */
+  --logo-bg: 255 255 255;
+  --logo-pad: 10px;
+}
+
+
+/* ---------- Dasar yang mengikuti tema ---------- */
+body { background-color: rgb(var(--canvas)); color: rgb(var(--ink)); transition: background-color .2s ease, color .2s ease; }
+/* Kontrol form tanpa kelas warna tetap mengikuti tema (:where = tanpa bobot, kelas Tailwind tetap menang) */
+:where(input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']):not([type='file']), select, textarea) {
+  background-color: rgb(var(--surface)); color: rgb(var(--ink));
+}
+::placeholder { color: rgb(var(--faint)); opacity: 1; }
+::selection { background: rgb(var(--brand) / .25); }
+/* Logo berlatar putih: di tema gelap dibungkus chip putih supaya tetap terbaca */
+.logo-chip { background: rgb(var(--logo-bg)); padding: var(--logo-pad); border-radius: 12px; display: block; }
+/* Logo: versi tulisan hitam untuk tema terang, tulisan putih untuk tema gelap */
+.logo-light, .logo-dark { display: block; }
+.logo-dark { display: none; }
+[data-tema="telkom-dark"] .logo-light,
+[data-tema="midnight"] .logo-light,
+[data-tema="forest"] .logo-light { display: none; }
+[data-tema="telkom-dark"] .logo-dark,
+[data-tema="midnight"] .logo-dark,
+[data-tema="forest"] .logo-dark { display: block; }
+@media (prefers-reduced-motion: reduce) { body { transition: none; } }
+
+html { -webkit-text-size-adjust: 100%; }
+img, video, canvas { max-width: 100%; }
+body { overflow-wrap: break-word; }
+/* ---------- Modal (pengganti alert / confirm) ---------- */
+@keyframes modal-masuk { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modal-naik { from { opacity: 0; transform: translateY(8px) scale(.97); } to { opacity: 1; transform: none; } }
+.modal-latar { animation: modal-masuk .15s ease-out; }
+.modal-kotak { animation: modal-naik .18s ease-out; }
+@media (prefers-reduced-motion: reduce) { .modal-latar, .modal-kotak { animation: none; } }
+
+/* ---------- Layout denah: kanvas di kiri, panel kustomisasi di kanan ---------- */
+/* Mengikuti lebar area konten (bukan lebar jendela), jadi tetap dua kolom walau browser di-zoom atau ada sidebar. */
+.login-bg { position: fixed; inset: 0; z-index: -2; background: url('/login-bg.jpg') center bottom / cover no-repeat; }
+.login-veil { position: fixed; inset: 0; z-index: -1; background: rgb(var(--canvas) / .22); }
+[data-tema="telkom-dark"] .login-veil,
+[data-tema="midnight"] .login-veil,
+[data-tema="forest"] .login-veil { background: rgb(var(--canvas) / .72); }
