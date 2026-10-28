@@ -8,9 +8,11 @@ import { db, catat } from '@/lib/db';
 import { getSession } from '@/lib/auth';
 import { ekstensiSurat } from '@/lib/magic';
 import { formatNomor } from '@/lib/nomor';
+import { adalahJenis, JENIS_SURAT } from '@/lib/jenis';
+import { nomorBerikut } from '@/lib/penomoran';
 import { getPengaturan, kunciUrut, tahunSekarang } from '@/lib/pengaturan';
 
-export type HasilCatat = { ok: boolean; pesan: string; id?: number; no_naskah?: string; agenda?: number };
+export type HasilCatat = { ok: boolean; pesan: string; id?: number; no_naskah?: string; agenda?: number; dipakai_ulang?: boolean };
 const gagal = (pesan: string): HasilCatat => ({ ok: false, pesan });
 const bersih = (v: FormDataEntryValue | null) => String(v ?? '').trim().replace(/\s+/g, ' ');
 
@@ -20,6 +22,8 @@ export async function catatSurat(fd: FormData): Promise<HasilCatat> {
   if (!s) return gagal('Sesi berakhir. Silakan login ulang.');
   const set = getPengaturan(), tahun = tahunSekarang();
 
+  const jenis = String(fd.get('jenis') || '');
+  if (!adalahJenis(jenis)) return gagal(`Pilih jenis surat (${JENIS_SURAT.map((j) => j.kode).join(', ')}).`);
   const sifat = String(fd.get('sifat'));
   if (!['biasa', 'segera', 'rahasia'].includes(sifat)) return gagal('Pilih sifat surat.');
   const perihal = bersih(fd.get('perihal'));
@@ -60,21 +64,24 @@ export async function catatSurat(fd: FormData): Promise<HasilCatat> {
     const hasil = db.transaction(() => {
       const kunci = kunciUrut(set.reset_urutan, tahun);
       db.prepare('INSERT OR IGNORE INTO nomor_urut(tahun, terakhir, agenda) VALUES(?, 0, 0)').run(kunci);
-      const u = db.prepare('SELECT terakhir, agenda FROM nomor_urut WHERE tahun = ?').get(kunci) as { terakhir: number; agenda: number };
-      const noUrut = u.terakhir + 1, agenda = Math.max(u.agenda + 1, set.agenda_mulai);
-      db.prepare('UPDATE nomor_urut SET terakhir = ?, agenda = ? WHERE tahun = ?').run(noUrut, agenda, kunci);
-      const noNaskah = formatNomor(set.format_nomor, { no: noUrut, tahun });
-      const r = db.prepare(`INSERT INTO surat(tahun, no_urut, agenda, no_naskah, sifat, perihal, dari, kepada, alamat, lampiran, tanggal, status, draft_file, draft_nama, dibuat_oleh)
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'reserved', ?, ?, ?)`)
-        .run(tahun, noUrut, agenda, noNaskah, sifat, perihal, dari, kepada, alamat, lampiran, tanggal, draftFile, draft?.nama ?? null, s.uid);
-      return { id: Number(r.lastInsertRowid), noNaskah, agenda };
+      // Nomor naskah + no agenda dari surat yang dibatalkan dipakai lagi lebih dulu; penghitung (terakhir, agenda) hanya maju bila tidak ada yang bisa dipakai ulang.
+      const nb = nomorBerikut(tahun, set);
+      db.prepare('UPDATE nomor_urut SET terakhir = CASE WHEN ? IS NULL THEN ? ELSE terakhir END, agenda = CASE WHEN ? IS NULL THEN ? ELSE agenda END WHERE tahun = ?').run(nb.ulangDariId, nb.no, nb.ulangDariId, nb.agenda, kunci);
+      const noUrut = nb.no, agenda = nb.agenda;
+      const noNaskah = formatNomor(set.format_nomor, { no: noUrut, kode: jenis, tahun });
+      const r = db.prepare(`INSERT INTO surat(tahun, no_urut, agenda, no_naskah, jenis, sifat, perihal, dari, kepada, alamat, lampiran, tanggal, status, draft_file, draft_nama, dibuat_oleh)
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'reserved', ?, ?, ?)`)
+        .run(tahun, noUrut, agenda, noNaskah, jenis, sifat, perihal, dari, kepada, alamat, lampiran, tanggal, draftFile, draft?.nama ?? null, s.uid);
+      const id = Number(r.lastInsertRowid);
+      if (nb.ulangDariId) db.prepare('UPDATE surat SET dipakai_ulang_oleh = ? WHERE id = ?').run(id, nb.ulangDariId);
+      return { id, noNaskah, agenda, ulang: nb.ulangDariId !== null };
     })();
-    catat(s.uid, 'Nomor terbit', hasil.noNaskah, hasil.id);
+    catat(s.uid, 'Nomor terbit', hasil.ulang ? `${hasil.noNaskah} (nomor dan no agenda bekas pembatalan dipakai kembali)` : hasil.noNaskah, hasil.id);
     revalidatePath('/', 'layout');
-    return { ok: true, pesan: 'Nomor naskah terbit.', id: hasil.id, no_naskah: hasil.noNaskah, agenda: hasil.agenda };
+    return { ok: true, pesan: 'Nomor naskah terbit.', id: hasil.id, no_naskah: hasil.noNaskah, agenda: hasil.agenda, dipakai_ulang: hasil.ulang };
   } catch (e: any) {
     if (draftFile) await fs.unlink(path.join(process.cwd(), 'uploads', 'draft', draftFile)).catch(() => {});
-    if (e?.code === 'SQLITE_CONSTRAINT_UNIQUE') return gagal('Nomor naskah kembar. Periksa format nomor di Pengaturan (harus memuat [NO]).');
+    if (e?.code === 'SQLITE_CONSTRAINT_UNIQUE') return gagal('Nomor naskah kembar. Periksa format nomor di Pengaturan (harus memuat [NO] dan, bila dipakai, [KODE]).');
     throw e;
   }
 }

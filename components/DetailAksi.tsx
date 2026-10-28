@@ -1,5 +1,6 @@
 'use client';
 import { useState, useTransition } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ubahSurat, batalkanSurat, type Hasil } from '@/app/arsip/actions';
 import { card, inp, lbl, btnP, btnO } from '@/lib/ui';
@@ -8,12 +9,14 @@ import PesanModal from './PesanModal';
 import { kirimPesan } from './NotifGlobal';
 import UnggahSurat, { type AturanFile } from './UnggahSurat';
 
-type S = { id: number; no_naskah: string; perihal: string; sifat: string; dari: string; kepada: string; alamat: string; lampiran: string; tanggal: string; status: 'reserved' | 'terarsip' | 'dibatalkan'; tahun: number };
+type S = { id: number; no_naskah: string; perihal: string; sifat: string; dari: string; kepada: string; alamat: string; lampiran: string; tanggal: string; status: 'reserved' | 'terarsip' | 'dibatalkan'; tahun: number; dipakai_ulang_oleh: number | null };
 
 /** Panel Tindakan di halaman detail: unggah/ganti file, edit data, batalkan nomor. */
 export default function DetailAksi({ surat: s, aturan }: { surat: S; aturan: AturanFile }) {
   const r = useRouter(), [edit, setEdit] = useState(false), [batal, setBatal] = useState(false), [alasan, setAlasan] = useState(''), [pesan, setPesan] = useState<Hasil | null>(null), [pending, mulai] = useTransition();
-  if (s.status === 'dibatalkan') return <section className={card}><h2 className="m-0 text-base font-bold">Tindakan</h2><p className="mt-2 mb-0 text-sm text-muted">Nomor ini sudah dibatalkan. Nomor dicoret di arsip dan tidak dipakai ulang.</p></section>;
+  if (s.status === 'dibatalkan') return <section className={card}><h2 className="m-0 text-base font-bold">Tindakan</h2><p className="mt-2 mb-0 text-sm text-muted">{s.dipakai_ulang_oleh
+      ? <>Nomor dan no agenda ini sudah dibatalkan dan kini dipakai kembali oleh <Link href={`/arsip/${s.dipakai_ulang_oleh}`} className="font-bold text-brandfg">surat lain</Link>.</>
+      : 'Nomor dan no agenda ini sudah dibatalkan dan akan dipakai kembali oleh surat berikutnya.'}</p></section>;
 
   return (
     <section className={card + ' flex flex-col gap-3'}>
@@ -40,7 +43,7 @@ export default function DetailAksi({ surat: s, aturan }: { surat: S; aturan: Atu
         </ModalDasar>
       )}
       {batal && (
-        <ModalDasar tipe="peringatan" judul="Batalkan nomor?" pesan={`${s.no_naskah} akan dicoret di arsip dan tidak dipakai ulang. Tindakan ini tidak bisa dibatalkan.`} onTutup={() => setBatal(false)}>
+        <ModalDasar tipe="peringatan" judul="Batalkan nomor?" pesan={`${s.no_naskah} akan dicoret di arsip dan nomor dan no agendanya dipakai kembali oleh surat berikutnya. Pembatalan tidak bisa dikembalikan.`} onTutup={() => setBatal(false)}>
           <label className={lbl + ' w-full text-left'}>Alasan pembatalan<input data-awal value={alasan} onChange={(e) => setAlasan(e.target.value)} maxLength={200} placeholder="Mis. salah ketik tujuan" className={inp} /></label>
           <button type="button" onClick={() => setBatal(false)} className={btnO}>Kembali</button>
           <button type="button" disabled={pending} className={btnP + ' disabled:opacity-60'} onClick={() => mulai(async () => { const h = await batalkanSurat(s.id, alasan); if (h.ok) { setBatal(false); setAlasan(''); kirimPesan(h.pesan); r.refresh(); } else setPesan(h); })}>{pending ? 'Memproses...' : 'Batalkan Nomor'}</button>

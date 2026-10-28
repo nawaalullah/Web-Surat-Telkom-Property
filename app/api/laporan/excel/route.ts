@@ -22,12 +22,12 @@ export async function GET(req: Request) {
   const rekap = wb.addWorksheet('Rekap Surat');
   rekap.columns = [
     { header: 'No', key: 'no', width: 6 }, { header: 'Tanggal', key: 'tgl', width: 14 }, { header: 'No Agenda', key: 'agenda', width: 11 },
-    { header: 'No Naskah', key: 'naskah', width: 30 }, { header: 'Sifat', key: 'sifat', width: 10 },
+    { header: 'No Naskah', key: 'naskah', width: 30 }, { header: 'Jenis', key: 'jenis', width: 8 }, { header: 'Sifat', key: 'sifat', width: 10 },
     { header: 'Dari', key: 'dari', width: 24 }, { header: 'Kepada', key: 'kepada', width: 28 }, { header: 'Alamat', key: 'alamat', width: 36 },
     { header: 'Perihal', key: 'perihal', width: 40 }, { header: 'Lampiran', key: 'lampiran', width: 18 }, { header: 'Status', key: 'status', width: 12 },
     { header: 'File', key: 'file', width: 28 }, { header: 'Diarsipkan', key: 'arsip', width: 20 },
   ];
-  for (const s of rekapSurat(f)) rekap.addRow({ no: s.no_urut, tgl: fmtTanggal(s.tanggal), agenda: s.agenda, naskah: aman(s.no_naskah), sifat: s.sifat, dari: aman(s.dari), kepada: aman(s.kepada), alamat: aman(s.alamat), perihal: aman(s.perihal), lampiran: aman(s.lampiran), status: s.status, file: aman(s.file_nama), arsip: s.diarsipkan_at ? fmtWaktu(s.diarsipkan_at) : '' });
+  for (const s of rekapSurat(f)) rekap.addRow({ no: s.no_urut, tgl: fmtTanggal(s.tanggal), agenda: s.agenda, naskah: aman(s.no_naskah), jenis: s.jenis ?? '', sifat: s.sifat, dari: aman(s.dari), kepada: aman(s.kepada), alamat: aman(s.alamat), perihal: aman(s.perihal), lampiran: aman(s.lampiran), status: s.status, file: aman(s.file_nama), arsip: s.diarsipkan_at ? fmtWaktu(s.diarsipkan_at) : '' });
   kepala(rekap);
 
   const audit = wb.addWorksheet('Log Audit');

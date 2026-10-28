@@ -36,7 +36,7 @@ export async function ubahSurat(id: number, fd: FormData): Promise<Hasil> {
   return { ok: true, pesan: 'Data surat berhasil diperbarui.' };
 }
 
-/** Batalkan nomor. Nomor dicoret di arsip dan tidak dipakai ulang; file yang sudah diunggah tetap tersimpan. */
+/** Batalkan nomor. Surat dicoret di arsip dan nomor naskah dan no agendanya dibebaskan: surat baru berikutnya memakai pasangan nomor ini lagi (lihat lib/penomoran.ts). File yang sudah diunggah tetap tersimpan. */
 export async function batalkanSurat(id: number, alasan: string): Promise<Hasil> {
   const ses = await getSession();
   if (!ses) return { ok: false, pesan: 'Sesi berakhir. Silakan login ulang.' };

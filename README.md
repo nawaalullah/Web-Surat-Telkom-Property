@@ -29,3 +29,8 @@ Cek hidup: `GET /api/health` -> `{"ok":true,"skema":"1"}`
 - Build di laptop/CI, bukan di VPS.
 - `SESSION_SECRET` harus berbeda dari BA Ukur; pakai subdomain terpisah.
 - Folder `data/` dan `uploads/` ada di luar git dan perlu dibackup.
+
+Catatan penomoran (v5):
+- Jenis surat tetap UM, HK, PS, LG (`lib/jenis.ts`), dipakai lewat token `[KODE]` di Pengaturan > Penomoran (bawaan `[NO]/[KODE]/[TAHUN]`).
+- Nomor surat dan no agenda yang dibatalkan dipakai kembali oleh surat berikutnya sebagai satu pasangan (yang terkecil dulu, lihat `lib/penomoran.ts`).
+- Saat server pertama kali jalan, `lib/db.ts` membangun ulang tabel `surat` otomatis (UNIQUE no_naskah diganti indeks unik hanya untuk surat tidak dibatalkan). Cadangkan `data/app.db` sebelum update.

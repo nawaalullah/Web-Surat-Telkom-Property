@@ -12,12 +12,12 @@ export default function BatalkanNomor({ id, noNaskah }: { id: number; noNaskah: 
   const r = useRouter(), [buka, setBuka] = useState(false), [alasan, setAlasan] = useState(''), [pesan, setPesan] = useState<Hasil | null>(null), [pending, mulai] = useTransition();
   return (
     <>
-      <button type="button" onClick={() => setBuka(true)} title="Batalkan nomor (tidak terpakai)" aria-label={`Batalkan nomor ${noNaskah}`}
+      <button type="button" onClick={() => setBuka(true)} title="Batalkan nomor (nomor dan no agenda bisa dipakai lagi)" aria-label={`Batalkan nomor ${noNaskah}`}
         className="w-9 h-9 shrink-0 inline-flex items-center justify-center rounded-lg border border-line-strong bg-surface cursor-pointer text-danger">
         <i className="fa-solid fa-ban" aria-hidden="true"></i>
       </button>
       {buka && (
-        <ModalDasar tipe="peringatan" judul="Batalkan nomor?" pesan={`${noNaskah} akan dicoret di arsip dan tidak dipakai ulang. Tindakan ini tidak bisa dibatalkan.`} onTutup={() => setBuka(false)}>
+        <ModalDasar tipe="peringatan" judul="Batalkan nomor?" pesan={`${noNaskah} akan dicoret di arsip dan nomor dan no agendanya dipakai kembali oleh surat berikutnya. Pembatalan tidak bisa dikembalikan.`} onTutup={() => setBuka(false)}>
           <label className={lbl + ' w-full text-left'}>Alasan pembatalan<input data-awal value={alasan} onChange={(e) => setAlasan(e.target.value)} maxLength={200} placeholder="Mis. salah ketik tujuan" className={inp} /></label>
           <button type="button" onClick={() => setBuka(false)} className={btnO}>Kembali</button>
           <button type="button" disabled={pending} className={btnP + ' disabled:opacity-60'}

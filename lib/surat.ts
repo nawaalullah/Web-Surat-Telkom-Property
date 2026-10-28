@@ -2,7 +2,7 @@ import { db } from './db';
 import { getPengaturan } from './pengaturan';
 
 export type Surat = {
-  id: number; tahun: number; no_urut: number; agenda: number; no_naskah: string; sifat: 'biasa' | 'segera' | 'rahasia';
+  id: number; tahun: number; no_urut: number; agenda: number; no_naskah: string; jenis: string | null; dipakai_ulang_oleh: number | null; sifat: 'biasa' | 'segera' | 'rahasia';
   perihal: string; dari: string; kepada: string; alamat: string; lampiran: string; tanggal: string;
   status: 'reserved' | 'terarsip' | 'dibatalkan'; draft_file: string | null; draft_nama: string | null;
   file: string | null; file_nama: string | null; file_ukuran: number | null; catatan: string; alasan_batal: string;

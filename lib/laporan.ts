@@ -55,12 +55,12 @@ export function logAudit(f: FilterLaporan, batas: number, offset = 0) {
 }
 
 export type BarisRekap = {
-  no_urut: number; tanggal: string; agenda: number; no_naskah: string; sifat: string; dari: string; kepada: string;
+  no_urut: number; tanggal: string; agenda: number; no_naskah: string; jenis: string | null; sifat: string; dari: string; kepada: string;
   alamat: string; perihal: string; lampiran: string; status: string; file_nama: string | null; diarsipkan_at: string | null;
 };
 export function rekapSurat(f: FilterLaporan) {
   const { where, arg } = kondisi(f);
-  return db.prepare(`SELECT s.no_urut, s.tanggal, s.agenda, s.no_naskah, s.sifat, s.dari, s.kepada, s.alamat, s.perihal, s.lampiran, s.status, s.file_nama, s.diarsipkan_at
+  return db.prepare(`SELECT s.no_urut, s.tanggal, s.agenda, s.no_naskah, s.jenis, s.sifat, s.dari, s.kepada, s.alamat, s.perihal, s.lampiran, s.status, s.file_nama, s.diarsipkan_at
     FROM surat s WHERE ${where} ORDER BY s.no_urut`).all(...arg) as BarisRekap[];
 }
 

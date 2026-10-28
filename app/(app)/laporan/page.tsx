@@ -25,7 +25,7 @@ export default async function Page({ searchParams }: { searchParams: Param }) {
   const kartu = [
     { t: 'Reserved', n: r.reserved, ket: 'nomor terbit, menunggu surat diunggah', titik: 'bg-warn-accent' },
     { t: 'Terarsip', n: r.terarsip, ket: `sepanjang ${f.tahun}`, titik: 'bg-ok-fg' },
-    { t: 'Dibatalkan', n: r.dibatalkan, ket: 'nomor tidak dipakai', titik: 'bg-muted' },
+    { t: 'Dibatalkan', n: r.dibatalkan, ket: 'nomor dibatalkan', titik: 'bg-muted' },
     { t: 'Belum diunggah', n: r.belum, ket: 'belum ada file surat', titik: 'bg-brand' },
   ];
   const ringkasFilter = [`Tahun ${f.tahun}`, f.status ? f.status : 'Semua status'].join(' · ');
