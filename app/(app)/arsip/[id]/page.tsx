@@ -35,7 +35,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-4">
                 <Data k="No" v={s.no_urut} /><Data k="Tanggal" v={fmtTanggal(s.tanggal)} /><Data k="No agenda" v={s.agenda} />
                 <Data k="Dari" v={s.dari} /><Data k="Kepada" v={s.kepada} /><Data k="Alamat" v={s.alamat} />
-                <Data k="Sifat" v={s.sifat[0].toUpperCase() + s.sifat.slice(1)} /><Data k="Lampiran" v={s.lampiran} />
+                <Data k="Jenis" v={s.jenis} /><Data k="Sifat" v={s.sifat[0].toUpperCase() + s.sifat.slice(1)} /><Data k="Lampiran" v={s.lampiran} />
                 {s.catatan && <div className="col-span-full"><Data k="Catatan" v={s.catatan} /></div>}
                 {batal && <div className="col-span-full"><Data k="Alasan pembatalan" v={s.alasan_batal} /></div>}
               </div>
@@ -57,7 +57,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               <div className="text-[11px] font-semibold uppercase tracking-widest text-white/60"># No naskah</div>
               <div className={'mt-2 font-mono text-lg font-bold break-all ' + (batal ? 'line-through opacity-70' : '')}>{s.no_naskah}</div>
             </div>
-            <DetailAksi surat={{ id: s.id, no_naskah: s.no_naskah, perihal: s.perihal, sifat: s.sifat, dari: s.dari, kepada: s.kepada, alamat: s.alamat, lampiran: s.lampiran, tanggal: s.tanggal, status: s.status, tahun: s.tahun }} aturan={{ maksMb: set.maks_mb, pdf: set.tipe_pdf, docx: set.tipe_docx, wajib: set.wajib_unggah }} />
+            <DetailAksi surat={{ id: s.id, no_naskah: s.no_naskah, perihal: s.perihal, sifat: s.sifat, dari: s.dari, kepada: s.kepada, alamat: s.alamat, lampiran: s.lampiran, tanggal: s.tanggal, status: s.status, tahun: s.tahun, dipakai_ulang_oleh: s.dipakai_ulang_oleh }} aturan={{ maksMb: set.maks_mb, pdf: set.tipe_pdf, docx: set.tipe_docx, wajib: set.wajib_unggah }} />
             <section className={card}>
               <h2 className="m-0 mb-3 text-base font-bold">Riwayat</h2>
               <ol className="m-0 p-0 list-none flex flex-col gap-3 text-[13px]">

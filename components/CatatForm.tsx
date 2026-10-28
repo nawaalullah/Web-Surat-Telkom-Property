@@ -3,15 +3,16 @@ import { useEffect, useRef, useState, useTransition } from 'react';
 import Link from 'next/link';
 import { catatSurat, type HasilCatat } from '@/app/catat/actions';
 import { formatNomor } from '@/lib/nomor';
+import { JENIS_SURAT } from '@/lib/jenis';
 import { card, inp, lbl, btnP, btnO } from '@/lib/ui';
 import { ModalDasar } from './Modal';
 import PesanModal from './PesanModal';
 import { useSeret } from './useSeret';
 
-type Isi = { sifat: string; perihal: string; dari: string; tanggal: string; kepada: string; alamat: string; lampiran: string };
+type Isi = { jenis: string; sifat: string; perihal: string; dari: string; tanggal: string; kepada: string; alamat: string; lampiran: string };
 type Props = {
   dariLama: string[]; alamat: { nama: string; alamat: string }[];
-  format: string; tahun: number; hariIni: string; noBerikut: number; agendaBerikut: number; maksMb: number; pdf: boolean; docx: boolean;
+  format: string; tahun: number; hariIni: string; noBerikut: number; agendaBerikut: number; nomorUlang: boolean; maksMb: number; pdf: boolean; docx: boolean;
 };
 const KUNCI = 'draft-catat-surat';
 const SIFAT = [['biasa', 'Biasa'], ['segera', 'Segera'], ['rahasia', 'Rahasia']] as const;
@@ -27,7 +28,7 @@ function Kepala({ ikon, judul, sub }: { ikon: string; judul: string; sub: string
 const jam = () => new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' });
 
 export default function CatatForm(p: Props) {
-  const kosong: Isi = { sifat: 'biasa', perihal: '', dari: p.dariLama.length === 1 ? p.dariLama[0] : '', tanggal: p.hariIni, kepada: '', alamat: '', lampiran: '' };
+  const kosong: Isi = { jenis: '', sifat: 'biasa', perihal: '', dari: p.dariLama.length === 1 ? p.dariLama[0] : '', tanggal: p.hariIni, kepada: '', alamat: '', lampiran: '' };
   const [v, setV] = useState<Isi>(kosong), [file, setFile] = useState<File | null>(null), [pesan, setPesan] = useState(''), [hasil, setHasil] = useState<HasilCatat | null>(null);
   const [tersimpan, setTersimpan] = useState(''), [pending, mulai] = useTransition(), [muat, setMuat] = useState(false), pilih = useRef<HTMLInputElement>(null);
   const ubah = (k: keyof Isi, x: string) => setV((o) => ({ ...o, [k]: x }));
@@ -50,7 +51,7 @@ export default function CatatForm(p: Props) {
   }
   const dz = useSeret((fl) => pilihFile(fl[0]), pending);
 
-  const pratinjau = formatNomor(p.format, { no: p.noBerikut, tahun: p.tahun });
+  const pratinjau = formatNomor(p.format, { no: p.noBerikut, kode: v.jenis || '[KODE]', tahun: p.tahun });
 
   function kirim(fd: FormData) {
     if (file) fd.set('draft', file); else fd.delete('draft');
@@ -71,7 +72,12 @@ export default function CatatForm(p: Props) {
     <form action={kirim} className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_340px] gap-4 items-start">
       <div className="flex flex-col gap-4 min-w-0">
         <section className={card}>
-          <Kepala ikon="fa-file-lines" judul="Informasi surat" sub="Sifat dan perihal surat." />
+          <Kepala ikon="fa-file-lines" judul="Informasi surat" sub="Jenis, sifat, dan perihal surat." />
+          <label className={lbl + ' mb-4 block'}>Jenis surat
+            <select name="jenis" required value={v.jenis} onChange={(e) => ubah('jenis', e.target.value)} className={inp}>
+              <option value="">Pilih jenis</option>{JENIS_SURAT.map((j) => <option key={j.kode} value={j.kode}>{j.kode}</option>)}
+            </select>
+          </label>
           <fieldset className="border-0 p-0 m-0"><legend className={lbl + ' p-0'}>Sifat</legend>
             <div className="mt-1.5 grid grid-cols-3 gap-3">
               {SIFAT.map(([k, t]) => (
@@ -141,6 +147,7 @@ export default function CatatForm(p: Props) {
           <div className="text-[11px] font-semibold uppercase tracking-widest text-white/60"># Pratinjau nomor</div>
           <div className="mt-2 font-mono text-lg font-bold break-all" aria-live="polite">{pratinjau}</div>
           <div className="mt-2 text-xs text-white/70">No agenda: <span className="font-mono text-white">{p.agendaBerikut}</span></div>
+          {p.nomorUlang && <div className="mt-2 text-xs text-white/70">Memakai kembali nomor dan no agenda surat yang dibatalkan.</div>}
           <span className="mt-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-warn-bg text-warn-fg"><span className="w-1.5 h-1.5 rounded-full bg-current" />Terbit saat disimpan</span>
         </div>
         <div className={card}>
@@ -154,7 +161,7 @@ export default function CatatForm(p: Props) {
       </aside>
 
       {hasil?.ok && (
-        <ModalDasar tipe="sukses" judul="Nomor naskah terbit" pesan={`${hasil.no_naskah}\nNo agenda: ${hasil.agenda}\nStatus Reserved: unggah surat final agar masuk arsip.`} onTutup={() => setHasil(null)}>
+        <ModalDasar tipe="sukses" judul="Nomor naskah terbit" pesan={`${hasil.no_naskah}\nNo agenda: ${hasil.agenda}${hasil.dipakai_ulang ? '\nNomor dan no agenda ini bekas surat yang dibatalkan, dipakai kembali.' : ''}\nStatus Reserved: unggah surat final agar masuk arsip.`} onTutup={() => setHasil(null)}>
           <button type="button" data-awal onClick={() => setHasil(null)} className={btnO}>Catat surat lain</button>
           <Link href="/arsip" className={btnP}>Ke Arsip</Link>
         </ModalDasar>

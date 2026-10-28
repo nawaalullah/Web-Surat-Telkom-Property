@@ -41,7 +41,7 @@ export const nomorTerakhir = (tahun: number) => urutTerakhir(tahun).no;
 
 /**
  * Atur nomor naskah berikutnya (untuk melanjutkan buku agenda yang sudah berjalan, mis. mulai dari 135).
- * Hanya boleh menaikkan: nomor yang sudah terbit tidak dipakai ulang. Mengembalikan pesan kesalahan atau null.
+ * Hanya boleh menaikkan: urutan tidak bisa dimundurkan ke nomor yang sudah terbit (nomor surat yang dibatalkan dipakai kembali lewat lib/penomoran.ts). Mengembalikan pesan kesalahan atau null.
  */
 export function setNomorBerikut(tahun: number, nomor: number, reset = getPengaturan().reset_urutan): string | null {
   const kunci = kunciUrut(reset, tahun);

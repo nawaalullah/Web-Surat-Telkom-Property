@@ -40,7 +40,7 @@ export const LANGKAH: LangkahBantuan[] = [
     isi: 'Buka detail surat, lalu pakai panel Tindakan. "Edit Data" mengubah perihal, sifat, tanggal, pihak terkait, dan lampiran. "Ganti File" menimpa file dengan versi baru. "Batalkan nomor" dipakai bila nomor tidak jadi dipakai.',
     butir: [
       'Nomor naskah dan no agenda tidak bisa diubah.',
-      'Pembatalan wajib disertai alasan, tidak bisa dikembalikan, dan nomornya tidak dipakai ulang.',
+      'Pembatalan wajib disertai alasan dan tidak bisa dikembalikan. Nomor dan no agendanya dipakai kembali oleh surat berikutnya.',
       'Semua perubahan tercatat di log audit.',
     ],
     kata: 'edit ubah ganti file batalkan batal nomor alasan salah ketik koreksi dibatalkan hapus',
@@ -67,12 +67,12 @@ export type StatusBantuan = { id: 'reserved' | 'terarsip' | 'dibatalkan'; nama: 
 export const STATUS: StatusBantuan[] = [
   { id: 'reserved', nama: 'Reserved', kelas: 'bg-warn-bg text-warn-fg', arti: 'Nomor sudah terbit, tetapi file surat final belum diunggah.', lanjut: 'Unggah surat di menu Belum Diunggah, atau batalkan nomor bila tidak dipakai.' },
   { id: 'terarsip', nama: 'Terarsip', kelas: 'bg-ok-bg text-ok-fg', arti: 'Surat lengkap: nomor, data, dan file sudah tersimpan di arsip.', lanjut: 'Data bisa diedit dan file bisa diganti kapan saja.' },
-  { id: 'dibatalkan', nama: 'Dibatalkan', kelas: 'bg-line-soft text-ink-2', arti: 'Nomor tidak dipakai. Dicoret di arsip dan tidak dipakai ulang.', lanjut: 'Tidak ada tindakan lanjutan. Alasan pembatalan tercatat di log audit.' },
+  { id: 'dibatalkan', nama: 'Dibatalkan', kelas: 'bg-line-soft text-ink-2', arti: 'Nomor tidak jadi dipakai. Surat dicoret di arsip dan nomor serta no agendanya dipakai kembali oleh surat berikutnya.', lanjut: 'Tidak ada tindakan lanjutan. Alasan pembatalan tercatat di log audit.' },
 ];
 
 export const TANYA: { t: string; j: string }[] = [
   { t: 'Salah isi perihal atau tujuan setelah nomor terbit. Bagaimana?', j: 'Buka detail surat, klik Edit Data. Perihal, sifat, tanggal, dari, kepada, alamat, dan lampiran bisa diubah. Hanya nomor naskah dan no agenda yang terkunci.' },
-  { t: 'Nomor tidak jadi dipakai, apakah bisa dihapus?', j: 'Nomor tidak dihapus, tetapi dibatalkan: klik Batalkan nomor, isi alasan. Nomor akan dicoret di arsip dan tidak dipakai ulang supaya urutan tetap bisa diaudit. Tindakan ini tidak bisa dibatalkan.' },
+  { t: 'Nomor tidak jadi dipakai, apakah bisa dihapus?', j: 'Nomor tidak dihapus, tetapi dibatalkan: klik Batalkan nomor, isi alasan. Suratnya tetap tercatat dan dicoret di arsip, sedangkan nomor naskah dan no agendanya dipakai kembali oleh surat berikutnya (bukan nomor baru). Pembatalan tidak bisa dikembalikan.' },
   { t: 'File apa yang boleh diunggah?', j: 'Secara bawaan PDF dan DOCX, maksimal 10 MB. Tipe dan batas ukuran bisa diubah di Pengaturan > Unggah & File.' },
   { t: 'Salah mengunggah file. Bagaimana menggantinya?', j: 'Di Arsip atau halaman detail, klik ikon Ganti File pada surat yang bersangkutan, pilih file yang benar, lalu simpan.' },
   { t: 'Isian form Catat Surat hilang atau pindah perangkat?', j: 'Draft form disimpan di browser perangkat ini saja, jadi tidak ikut pindah ke perangkat lain. Draft dibersihkan otomatis setelah nomor terbit.' },

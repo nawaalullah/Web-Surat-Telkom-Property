@@ -3,6 +3,7 @@ import { useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { simpanSemuaPengaturan, type Hasil } from '@/app/pengaturan/actions';
 import { formatNomor, TOKEN_NOMOR } from '@/lib/nomor';
+import { JENIS_SURAT } from '@/lib/jenis';
 import { MAKS_MB_BATAS, type Pengaturan } from '@/lib/pengaturanDef';
 import { card, inp, lbl, btnP, btnO } from '@/lib/ui';
 import PesanModal from './PesanModal';
@@ -34,7 +35,7 @@ export default function PengaturanForm({ awal, tahun, terakhir, agendaTerakhir }
   const nomorAwal = terakhir + 1;
   const [p, setP] = useState(awal), [nomorMulai, setNomorMulai] = useState<string>(String(nomorAwal)), [pesan, setPesan] = useState<Hasil | null>(null), [pending, mulai] = useTransition();
   const ubah = <K extends keyof Pengaturan>(k: K, v: Pengaturan[K]) => setP((x) => ({ ...x, [k]: v }));
-  const nomorBerikut = formatNomor(p.format_nomor, { no: Math.max(1, Number(nomorMulai) || nomorAwal), tahun });
+  const nomorBerikut = formatNomor(p.format_nomor, { no: Math.max(1, Number(nomorMulai) || nomorAwal), kode: JENIS_SURAT[0].kode, tahun });
   const agendaBerikut = Math.max(agendaTerakhir + 1, Number(p.agenda_mulai) || 1);
 
   return (
