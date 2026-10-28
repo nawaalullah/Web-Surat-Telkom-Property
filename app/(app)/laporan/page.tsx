@@ -96,7 +96,7 @@ export default async function Page({ searchParams }: { searchParams: Param }) {
               </div>
             </section>
 
-            <section className={card + ' print:mt-4 print:break-inside-avoid jaga-utuh'}>
+            <section className={card + ' print:mt-4 print:break-inside-avoid jaga-utuh'} style={{ breakInside: 'avoid', pageBreakInside: 'avoid' }}>
               <h2 className="m-0 text-base font-bold">Surat per pengirim</h2>
               <div className="mt-4 flex flex-col gap-4">
                 {perUnit.map((u) => (
