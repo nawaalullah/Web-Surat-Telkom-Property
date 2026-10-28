@@ -1,10 +1,10 @@
-import Link from 'next/link';
 import Logo from '@/components/Logo';
 import Sidebar from '@/components/Sidebar';
 import TemaMenu from '@/components/TemaMenu';
 import NotifGlobal from '@/components/NotifGlobal';
 import Kerangka from '@/components/Kerangka';
 import ProfilMenu from '@/components/Profilmenu';
+import TombolBantuan from '@/components/PusatBantuan';
 import { logout } from '@/app/actions';
 import { db } from '@/lib/db';
 import { menuUtama, menuPengaturan } from '@/lib/menus';
@@ -29,9 +29,7 @@ export default function Shell({ s, children }: { s: { uid: number; nama: string 
       profil={
         <div className="flex items-center gap-2 min-w-0">
           <TemaMenu />
-          <Link href="/bantuan" aria-label="Bantuan" className="w-11 h-11 rounded-full bg-surface border border-line text-brandfg flex items-center justify-center no-underline">
-            <i className="fa-solid fa-circle-question text-xl" aria-hidden="true" />
-          </Link>
+          <TombolBantuan belum={belum} />
           <div className="min-w-0">
             <ProfilMenu nama={s.nama} jabatan={jabatan} foto={u?.foto || undefined} hrefProfil="/profil" keluar={logout} />
           </div>
