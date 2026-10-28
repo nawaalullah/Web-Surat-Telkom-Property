@@ -37,7 +37,7 @@ function hapusJenisUnit(d: Database.Database) {
     d.pragma('foreign_keys = OFF');
     try {
       d.transaction(() => {
-        d.exec('DROP INDEX IF EXISTS idx_surat_tahun; DROP INDEX IF EXISTS idx_surat_status; DROP INDEX IF EXISTS ux_surat_naskah_aktif; ALTER TABLE surat RENAME TO surat_lama;');
+        d.exec('DROP INDEX IF EXISTS idx_surat_tahun; DROP INDEX IF EXISTS idx_surat_status; ALTER TABLE surat RENAME TO surat_lama;');
         d.exec(fs.readFileSync(path.join(process.cwd(), 'db', 'schema.sql'), 'utf8'));
         d.exec(`INSERT INTO surat(${salin}) SELECT ${salin} FROM surat_lama; DROP TABLE surat_lama;`);
       })();
@@ -73,16 +73,7 @@ function sesuaikanSurat(d: Database.Database) {
   d.prepare("UPDATE pengaturan SET nilai = ? WHERE kunci = 'format_nomor' AND nilai = '[NO]/[TAHUN]'").run(FORMAT_BAWAAN);
 }
 
-/**
- * Koneksi dipakai bersama lewat globalThis agar tidak dibuka berulang saat hot reload di mode dev. Nomor VERSI_KONEKSI dinaikkan setiap skema/migrasi berubah:
- * koneksi lama dari sebelum perubahan dibuang dan database dibuka ulang (migrasi dijalankan lagi), sehingga tidak muncul error "no such column" tanpa restart manual.
- */
-const VERSI_KONEKSI = 5;
-if (g.__arsipDb && g.__arsipDbVersi !== VERSI_KONEKSI) {
-  try { g.__arsipDb.close(); } catch { /* abaikan */ }
-  g.__arsipDb = undefined;
-}
-export const db: Database.Database = g.__arsipDb ?? (g.__arsipDbVersi = VERSI_KONEKSI, g.__arsipDb = open());
+export const db: Database.Database = g.__arsipDb ?? (g.__arsipDb = open());
 
 /** Catat aktivitas pengguna ke log_aktivitas (dipakai halaman Laporan & Audit di Tahap 6). */
 export function catat(uid: number | null, aksi: string, objek = '', suratId: number | null = null) {

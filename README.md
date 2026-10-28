@@ -34,3 +34,4 @@ Catatan penomoran (v5):
 - Jenis surat tetap UM, HK, PS, LG (`lib/jenis.ts`), dipakai lewat token `[KODE]` di Pengaturan > Penomoran (bawaan `[NO]/[KODE]/[TAHUN]`).
 - Nomor surat dan no agenda yang dibatalkan dipakai kembali oleh surat berikutnya sebagai satu pasangan (yang terkecil dulu, lihat `lib/penomoran.ts`).
 - Saat server pertama kali jalan, `lib/db.ts` membangun ulang tabel `surat` otomatis (UNIQUE no_naskah diganti indeks unik hanya untuk surat tidak dibatalkan). Cadangkan `data/app.db` sebelum update.
+- Pengaturan > Reset Data: mengosongkan surat, penomoran, log audit, dan `uploads/` (akun tidak berubah). Wajib password + ketik RESET; salinan data lama masuk `data/cadangan/reset-<waktu>/`. Kunci di produksi dengan `RESET_DATA=off` di `.env`.

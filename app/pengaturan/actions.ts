@@ -1,7 +1,9 @@
 'use server';
+import bcrypt from 'bcryptjs';
 import { revalidatePath } from 'next/cache';
 
-import { catat } from '@/lib/db';
+import { catat, db } from '@/lib/db';
+import { resetData, resetDiizinkan } from '@/lib/resetData';
 import { getSession } from '@/lib/auth';
 import { cekFormatNomor } from '@/lib/nomor';
 import { MAKS_MB_BATAS, simpanPengaturan, setNomorBerikut, tahunSekarang, urutTerakhir, type Pengaturan } from '@/lib/pengaturan';
@@ -54,4 +56,23 @@ export async function simpanSemuaPengaturan(fd: FormData): Promise<Hasil> {
   catat(s.uid, 'Ubah pengaturan', `format ${format}` + (nomor !== nomorAwal ? `, nomor berikutnya ${nomor}` : ''));
   revalidatePath('/pengaturan');
   return { ok: true, pesan: 'Pengaturan berhasil disimpan.' };
+}
+
+/** Reset data ke keadaan aplikasi baru. Wajib password akun dan ketikan "RESET"; akun login tidak berubah. */
+export async function resetDataAplikasi(fd: FormData): Promise<Hasil> {
+  const s = await getSession();
+  if (!s) return { ok: false, pesan: 'Sesi berakhir. Silakan login ulang.' };
+  if (!resetDiizinkan()) return { ok: false, pesan: 'Reset data dinonaktifkan di server ini (RESET_DATA=off).' };
+  if (String(fd.get('konfirmasi') || '').trim() !== 'RESET') return { ok: false, pesan: 'Ketik RESET (huruf besar) untuk melanjutkan.' };
+  const u = db.prepare('SELECT password_hash FROM users WHERE id = ? AND aktif = 1').get(s.uid) as { password_hash: string } | undefined;
+  if (!u || !bcrypt.compareSync(String(fd.get('password') || ''), u.password_hash)) return { ok: false, pesan: 'Password salah.' };
+
+  try {
+    const h = await resetData(fd.get('simpan_pengaturan') === '1');
+    catat(s.uid, 'Reset data', `${h.baris} baris dikosongkan; cadangan di ${h.cadangan}`);
+    revalidatePath('/', 'layout');
+    return { ok: true, pesan: `Data berhasil direset seperti aplikasi baru. Salinan data lama ada di ${h.cadangan}/ (hapus folder itu bila tidak diperlukan).` };
+  } catch (e: any) {
+    return { ok: false, pesan: 'Reset gagal: ' + (e?.message || 'kesalahan tidak diketahui') + '. Data tidak diubah bila cadangan gagal dibuat.' };
+  }
 }

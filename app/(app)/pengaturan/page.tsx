@@ -1,6 +1,9 @@
 import { requireSession } from '@/lib/auth';
 import { getPengaturan, urutTerakhir, tahunSekarang } from '@/lib/pengaturan';
+import { db } from '@/lib/db';
+import { resetDiizinkan } from '@/lib/resetData';
 import PengaturanForm from '@/components/PengaturanForm';
+import ResetData from '@/components/ResetData';
 
 export const metadata = { title: 'Pengaturan - Arsip Surat Keluar' };
 export const dynamic = 'force-dynamic';
@@ -18,6 +21,9 @@ export default async function Page() {
         <p className="mt-1 text-sm text-muted">Atur penomoran, unggahan, dan pengingat surat keluar.</p>
         <div className="mt-6">
           <PengaturanForm awal={getPengaturan()} tahun={tahun} terakhir={u.no} agendaTerakhir={u.agenda} />
+        </div>
+        <div className="mt-4">
+          <ResetData diizinkan={resetDiizinkan()} jumlahSurat={(db.prepare('SELECT COUNT(*) n FROM surat').get() as { n: number }).n} />
         </div>
       </div>
     </main>

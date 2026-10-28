@@ -32,17 +32,13 @@ export default async function Page({ searchParams }: { searchParams: Param }) {
   const tanggal = new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Jakarta' });
   const dua = (n: number) => String(n).padStart(2, '0');
 
-  const konten = (
+  return (
+    <main className="px-4 sm:px-6 lg:px-10 py-6 print:p-0">
+      {cetak && <AutoCetak />}
       <div className="max-w-[1280px] mx-auto">
-        {/* Kop laporan: hanya tampil saat dicetak. Logo di kiri, tanggal cetak di kanan. */}
-        <div className="hidden print:flex items-end justify-between gap-4 pb-3 mb-4 border-b-2 border-brand">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo-light.png" alt="Telkom Property by Telkom Indonesia" className="h-12 w-auto" />
-          <div className="text-right text-xs leading-snug text-muted"><div className="font-bold text-ink-2">Arsip Surat Keluar</div><div>Dicetak {tanggal}</div></div>
-        </div>
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <div className="text-xs font-semibold uppercase tracking-widest text-muted print:hidden">{tanggal}</div>
+            <div className="text-xs font-semibold uppercase tracking-widest text-muted">{tanggal}</div>
             <h1 className="mt-1 text-3xl font-extrabold tracking-tight">Laporan &amp; Audit</h1>
             <p className="mt-1 text-sm text-muted">Rekap surat keluar dan jejak perubahan data.</p>
             <p className="mt-1 text-xs text-muted hidden print:block">{ringkasFilter}</p>
@@ -56,7 +52,7 @@ export default async function Page({ searchParams }: { searchParams: Param }) {
         <div className="mt-6 flex flex-col gap-4">
           <FilterLaporan tahun={f.tahun} status={f.status} daftarTahun={daftarTahun} />
 
-          <section className="grid grid-cols-2 lg:grid-cols-4 gap-4 print:break-inside-avoid jaga-utuh" aria-label="Ringkasan">
+          <section className="grid grid-cols-2 lg:grid-cols-4 gap-4" aria-label="Ringkasan">
             {kartu.map((k) => (
               <div key={k.t} className={card}>
                 <div className="flex items-center gap-2 text-[13px] font-bold"><span className={'w-2 h-2 rounded-full ' + k.titik} aria-hidden="true"></span>{k.t}</div>
@@ -67,7 +63,7 @@ export default async function Page({ searchParams }: { searchParams: Param }) {
           </section>
 
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] gap-4 items-start print:block">
-            <section className={card + ' !p-0 overflow-hidden print:overflow-visible'}>
+            <section className={card + ' !p-0 overflow-hidden'}>
               <h2 className="m-0 px-5 py-4 text-base font-bold flex items-center gap-2.5"><i className="fa-solid fa-clock-rotate-left text-brandfg" aria-hidden="true"></i>Log audit</h2>
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse text-sm min-w-[640px]">
@@ -96,7 +92,7 @@ export default async function Page({ searchParams }: { searchParams: Param }) {
               </div>
             </section>
 
-            <section className={card + ' print:mt-4 print:break-inside-avoid jaga-utuh'}>
+            <section className={card + ' print:mt-4'}>
               <h2 className="m-0 text-base font-bold">Surat per pengirim</h2>
               <div className="mt-4 flex flex-col gap-4">
                 {perUnit.map((u) => (
@@ -111,19 +107,6 @@ export default async function Page({ searchParams }: { searchParams: Param }) {
           </div>
         </div>
       </div>
-  );
-
-  // Saat cetak, margin halaman dibuat lewat thead/tfoot yang berulang di tiap halaman (@page margin 0 menghilangkan URL & tanggal bawaan browser).
-  return (
-    <main className="px-4 sm:px-6 lg:px-10 py-6 print:p-0">
-      {cetak && <AutoCetak />}
-      {cetak ? (
-        <table className="w-full">
-          <thead><tr><td className="h-[14mm] p-0" /></tr></thead>
-          <tbody><tr><td className="p-0 px-[13mm] align-top">{konten}</td></tr></tbody>
-          <tfoot><tr><td className="h-[14mm] p-0" /></tr></tfoot>
-        </table>
-      ) : konten}
     </main>
   );
 }
