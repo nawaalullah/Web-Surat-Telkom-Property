@@ -1,6 +1,6 @@
 /** Fungsi murni untuk format nomor naskah (aman dipakai di server maupun client). */
 export const TOKEN_NOMOR = ['[NO]', '[KODE]', '[TAHUN]'] as const;
-export const FORMAT_BAWAAN = '[NO]/[KODE]/[TAHUN]';
+export const FORMAT_BAWAAN = '[NO]/[KODE].000/GSD-065-04/[TAHUN]';
 const PANJANG_NO = 3; // nomor urut ditulis 001, 002, ...
 
 export type BahanNomor = { no: number; kode: string; tahun: number };
