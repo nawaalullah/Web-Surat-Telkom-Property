@@ -2,7 +2,7 @@
 import { useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { simpanSemuaPengaturan, type Hasil } from '@/app/pengaturan/actions';
-import { formatNomor, TOKEN_NOMOR } from '@/lib/nomor';
+import { FORMAT_BAWAAN, formatNomor, TOKEN_NOMOR } from '@/lib/nomor';
 import { JENIS_SURAT } from '@/lib/jenis';
 import { MAKS_MB_BATAS, type Pengaturan } from '@/lib/pengaturanDef';
 import { card, inp, lbl, btnP, btnO } from '@/lib/ui';
@@ -49,6 +49,7 @@ export default function PengaturanForm({ awal, tahun, terakhir, agendaTerakhir }
           </label>
           <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted">Token:
             {TOKEN_NOMOR.map((t) => <button key={t} type="button" onClick={() => ubah('format_nomor', p.format_nomor + t)} title={`Tambahkan ${t}`} className="font-mono px-2 py-1 rounded-md bg-well border border-line cursor-pointer text-ink-2">{t}</button>)}
+            <button type="button" onClick={() => ubah('format_nomor', FORMAT_BAWAAN)} title="Isi format dengan nilai bawaan" className="ml-auto px-2.5 py-1 rounded-md border border-line-strong bg-surface cursor-pointer text-ink-2 font-semibold">Pakai format bawaan</button>
           </div>
           <p className="m-0 mt-2 text-xs text-muted">Teks tetap boleh ditulis langsung, mis. <span className="font-mono">[NO]/UM-000/GSD-065-04/[TAHUN]</span>.</p>
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

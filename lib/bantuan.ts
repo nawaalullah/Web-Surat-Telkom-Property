@@ -77,7 +77,7 @@ export const TANYA: { t: string; j: string }[] = [
   { t: 'Salah mengunggah file. Bagaimana menggantinya?', j: 'Di Arsip atau halaman detail, klik ikon Ganti File pada surat yang bersangkutan, pilih file yang benar, lalu simpan.' },
   { t: 'Isian form Catat Surat hilang atau pindah perangkat?', j: 'Draft form disimpan di browser perangkat ini saja, jadi tidak ikut pindah ke perangkat lain. Draft dibersihkan otomatis setelah nomor terbit.' },
   { t: 'Mengapa ada surat yang ditandai terlambat?', j: 'Surat berstatus Reserved yang belum diunggah melewati batas hari pengingat. Atur di Pengaturan > Pengingat.' },
-  { t: 'Bagaimana mengubah format atau awal nomor?', j: 'Pengaturan > Penomoran. Format memakai [NO] dan [TAHUN] ditambah teks tetap, dan urutan bisa direset tiap tahun.' },
+  { t: 'Bagaimana mengubah format atau awal nomor?', j: 'Pengaturan > Penomoran. Format memakai [NO], [KODE], dan [TAHUN] ditambah teks tetap, dan urutan bisa direset tiap tahun.' },
   { t: 'Bagaimana mengunduh rekap surat?', j: 'Buka Laporan & Audit, pilih tahun dan status, lalu klik Excel untuk berkas rekap atau PDF untuk dicetak.' },
   { t: 'Bagaimana mencadangkan data?', j: 'Pengaturan > Cadangan & Ekspor untuk database. File surat ada di folder uploads/ pada server dan perlu disalin manual.' },
   { t: 'Bagaimana mengganti tema tampilan?', j: 'Klik tombol palet warna di kanan atas, lalu pilih tema. Pilihan tersimpan di browser ini.' },
